@@ -1,5 +1,6 @@
 <html>
   <head>
+    <meta charset="utf-8">
     <title>Hello</title>
   </head>
   <body>
@@ -8,10 +9,12 @@
     <li>{{ item }} : {{quantity}}</li>
     {% endfor %}
     </ul>
-    <form method="POST">
-      <label>Item</label><input type="text" name="item"/>
-      <label>Quantity</label><input type="text" name="quantity"/>
-      <input type="submit">
+    <form action=" "  method="POST">
+      <label>Item</label> <input type="text" name="item"/>
+      <label>Quantity</label> <input type="text" name="quantity"/>
+      <input type="checkbox" name="update_button" value="Update" />Update
+      <input type="checkbox" name="delete_button" value="Delete" />Delete
+      <input type="submit" name="submit_button" value="Submit"/>
     </form>
   </body>
 </html>
