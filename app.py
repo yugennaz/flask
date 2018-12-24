@@ -7,7 +7,7 @@ from flask import request
 app = Flask(__name__)
 @app.route('/')
 def index():
-    return render_template('index')
+    return render_template("index.html")
 
 
 @app.route('/items', methods=['GET', 'POST'])
@@ -17,9 +17,9 @@ def items():
         if request.method == 'POST':
             item = request.form['item']
             quantity = request.form['quantity']
+            items.update({item:quantity})
             if "delete_button" in request.form.keys() and request.form["delete_button"] == "Delete":
                 del items[item]
             with open('db.txt', 'w') as f2:
                 json.dump(items, f2)
-        return render_template('items.html', items=items)
-
+    return render_template('items.html', items=items)
