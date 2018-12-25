@@ -1,13 +1,19 @@
 {% extends "layout.html" %}
 {% block body %}
-  <ul>
-  {% for item, quantity in items.items() %}
-  <li>{{ item }}:{{quantity}}</li>
-  {% endfor %}
-  </ul>
   <form method="POST">
-    <label>Item</label> <input type="text" name="item"/>
-    <label>Quantity</label> <input type="text" name="quantity"/>
-    <input type="submit">
+    <ul>
+    {% for item, quantity in items.items() %}
+      <li>
+        <input type="text" value="{{ item }}" name="{{ item }}">
+        <input type="text" value="{{ quantity }}" name="{{ item }}_quantity">
+        <input type="checkbox" name="{{ item }}_delete">
+      </li>
+    {% endfor %}
+    </ul>
+    <input type="submit" value="Update">
+  </form>
+  <form method="POST">
+    <input type="hidden" name="add">
+    <input type="submit" value="Add">
   </form>
 {% endblock %}
