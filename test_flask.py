@@ -70,17 +70,11 @@ def test_post_items_add(client, db_data):
     with mock.patch('app.open') as mocked:
         mocked.return_value = db_data
         response = client.post(
-            '/items', data={'banana': 'banana',
-                'banana_quantity': 5,
-                'new': 'new',
-                'new_quantity': 0,
+            '/items', data={
                 'add': 'new'
                 }
             )
         response = response.data.decode('utf-8')
-        assert '<input type="text" value="banana" name="banana">' in response
-        assert '<input type="text" value="5" name="banana_quantity">' \
-            in response
         assert '<input type="text" value="new" name="new">' in response
         assert '<input type="text" value="0" name="new_quantity">' \
             in response
