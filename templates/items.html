@@ -2,7 +2,7 @@
 {% block body %}
   <form method="POST" class="form">
     <div class="form-row">
-      <div class="col-4">
+      <div class="col-6">
     {% for item, quantity in items.items() %}
         <div class="input-group">
         <input class="form-control mb-2" type="text" value="{{ item }}" name="{{ item }}_name">
