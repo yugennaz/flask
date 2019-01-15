@@ -3,6 +3,7 @@ import pytest
 from io import StringIO
 from unittest import mock
 from app import app
+from lxml import html
 
 
 @pytest.fixture
@@ -23,14 +24,12 @@ def db_data():
 def test_index(client):
     response = client.get('/')
     response = response.data.decode('utf-8')
-    assert 'Hello' in response
-
+    assert 'Hello customer. Welcome to our shop!' in response
 
 def test_post_items_update(client, db_data):
     with mock.patch('app.open') as mocked:
-        mocked.return_value = db_data
-        response = client.post(
-            '/items',
+        mocked.return_value= db_data
+        response = client.post('/items', 
             data={
                 'banana': 'banana',
                 'banana_quantity': 5,
@@ -60,6 +59,7 @@ def test_post_items_remove(client, db_data):
             }
         )
         response = response.data.decode('utf-8')
+        response = html.fromstring(response)
         assert '<input type="text" value="banana" name="banana">' in response
         assert '<input type="text" value="5" name="banana_quantity">' \
             in response
@@ -71,11 +71,9 @@ def test_post_items_add(client, db_data):
         mocked.return_value = db_data
         response = client.post(
             '/items', data={
-                'add': 'new'
-                }
-            )
+                'add': ' '})
         response = response.data.decode('utf-8')
-        assert '<input type="text" value="new" name="new">' in response
-        assert '<input type="text" value="0" name="new_quantity">' \
-            in response
-        assert'add' in response
+        response = html.fromstring(response)
+        assert len(response.cssselect('input[name="__name"]')) == 1
+        assert len(response.cssselect('input[name="__quantity"]')) == 1
+        
