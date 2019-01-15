@@ -5,21 +5,13 @@ from flask import request
 
 app = Flask(__name__)
 
+
 @app.route('/')
 def index():
     """
     Return index page of the web app
     """
     return render_template('index.html')
-
-def is_key_item(key):
-    if 'quantity' in key:
-        return False
-    if 'delete' in key:
-        return False
-    if key == 'add':
-        return False
-    return True
 
 
 @app.route('/items', methods=['GET', 'POST'])
@@ -31,16 +23,14 @@ def items():
     with open('db.txt', 'r') as f:
         items = json.load(f)
         if request.method == 'POST':
-            print(request.method)
             if 'add' in request.form:
-                items['new'] = 0
+                items[' '] = 0
             else:
                 items = {}
             for key in request.form:
-                print(key)
-                if is_key_item(key):
+                if key.endswith('name'):
                     item = request.form[key]
-                    quantity_key = key + '_quantity'
+                    quantity_key = key[:-5] + '_quantity'
                     quantity = request.form[quantity_key]
                     items[item] = int(quantity)
             for key in request.form:

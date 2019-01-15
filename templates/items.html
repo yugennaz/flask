@@ -1,19 +1,28 @@
 {% extends "layout.html" %}
 {% block body %}
-  <form method="POST">
-    <ul>
+  <form method="POST" class="form">
+    <div class="form-row">
+      <div class="col-4">
     {% for item, quantity in items.items() %}
-      <li>
-        <input type="text" value="{{ item }}" name="{{ item }}">
-        <input type="text" value="{{ quantity }}" name="{{ item }}_quantity">
-        <input type="checkbox" name="{{ item }}_delete">
-      </li>
+        <div class="input-group">
+        <input class="form-control mb-2" type="text" value="{{ item }}" name="{{ item }}_name">
+        <input class="form-control mb-2"  type="text" value="{{ quantity }}" name="{{ item }}_quantity">
+          <div class="input-group-prepend mb-2">
+            <div class="input-group-text">
+            <input type="checkbox"  name="{{ item }}_delete">
+        </div>
+      </div>
     {% endfor %}
-    </ul>
-    <input type="submit" value="Update">
+    </div>
+    <div class="btn-group mb-2">
+      <div class="col-sm-9">
+      <input class="btn btn btn-light" type="submit" value="Update">
+    </div>
   </form>
-  <form method="POST">
-    <input type="hidden" name="add">
-    <input type="submit" value="Add">
-  </form>
+    <form method="POST">
+      <input type="hidden" name="add">
+      <div class="btn-group-prepend">
+        <input class="btn btn btn-light" type="submit" value="Add">
+    </form>
+  </div>
 {% endblock %}
