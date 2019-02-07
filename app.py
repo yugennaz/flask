@@ -33,7 +33,7 @@ admin.add_view(Admin(CartItem))
 # Create a user to test with
 @app.before_first_request
 def create_user():
-    for Model in (Role, User, UserRoles):
+    for Model in (Role, User, UserRoles, Customer, Item, Cart, CartItem):
         Model.drop_table(fail_silently=True)
         Model.create_table(fail_silently=True)
     user_datastore.create_user(
