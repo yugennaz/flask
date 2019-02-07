@@ -1,4 +1,7 @@
 __pycache__
 db.txt
 .coverage
-static/
+.pytest_cache
+*.sql
+python3.6m.exe.stackdump
+4ernovik.py

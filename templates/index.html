@@ -1,7 +1,15 @@
 {% extends "layout.html" %}
 {% block body %}
-    <h1>Hello customer. Welcome to our shop!</h1>
+    <h1>
+    Hello,
+    {% if name %}
+    {{ name }}
+    {% else %}
+    customer
+    {% endif %}
+    . Welcome to our shop!
+    </h1>
     <p>For further work go through the next link: 
-    <a href="http://127.0.0.1:5000/items">Your Cart</a></p>
+    <a href="http://127.0.0.1:5000/api/items/">Your Cart</a></p>
     <img src="/static/logo1.png">
 {% endblock %}
