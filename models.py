@@ -44,7 +44,7 @@ class Item(BaseModel):
 
 class Customer(BaseModel):
     name = CharField()
-    sername =CharField()
+    srname =CharField()
     id_customer = IntegerField()
 
     def __str__(self):
