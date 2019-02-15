@@ -3,9 +3,9 @@
   <form method="POST" class="form">
     <div class="form-row">
       <div class="col-6">
-    {% for item, quantity in items.items() %}
+    {% for item in items %}
         <div class="input-group">
-        <input class="form-control mb-2" type="text" value="{{ item }}" name="{{ item }}_name">
+        <input class="form-control mb-2" type="text" value="{{ item.name }}" name="{{ item }}_name">
         <input class="form-control mb-2"  type="text" value="{{ quantity }}" name="{{ item }}_quantity">
           <div class="input-group-prepend mb-2">
             <div class="input-group-text">

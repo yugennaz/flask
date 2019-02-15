@@ -26,3 +26,4 @@ class AuthMixin:
 
 class Admin(AuthMixin, ModelView):
     pass
+
