@@ -1,6 +1,6 @@
 from peewee import (
-    Model, SqliteDatabase,
-    CharField, IntegerField, ForeignKeyField, BooleanField
+    SqliteDatabase,
+    CharField, IntegerField, ForeignKeyField, BooleanField, DecimalField
 )
 from flask_security import UserMixin
 from playhouse.signals import Model, post_save
@@ -36,7 +36,7 @@ class UserRoles(BaseModel):
 class Item(BaseModel):
     name = CharField()
     quantity = IntegerField()
-    price = IntegerField()
+    price = DecimalField()
 
     def __str__(self):
         return self.name
@@ -44,8 +44,6 @@ class Item(BaseModel):
 
 class Customer(BaseModel):
     name = CharField()
-    srname =CharField()
-    id_customer = IntegerField()
 
     def __str__(self):
         return self.name
@@ -53,7 +51,7 @@ class Customer(BaseModel):
 
 class Cart(BaseModel):
     customer = ForeignKeyField(Customer, backref='carts')
-    price = IntegerField(null=True)
+    price = DecimalField(null=True)
     paid = BooleanField(default=False)
 
     def __str__(self):
@@ -64,6 +62,10 @@ class CartItem(BaseModel):
     cart = ForeignKeyField(Cart, backref='items')
     item = ForeignKeyField(Item, backref='carts')
     quantity = IntegerField()
+
+    def __str__(self):
+        return self.name
+
 
 @post_save(sender=CartItem)
 def on_save_handler(model_class, instance, created):
