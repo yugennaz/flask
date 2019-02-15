@@ -32,16 +32,18 @@ def start(bot, update):
     return ADD_CUSTOMER
 
 
-def add_customer(bot, update):
+def add_customer(bot, update, user_data):
     name = update.message.text
-    customer = Customer.select(Customer.name).where(Customer.name == name)
+    customer = Customer.select().where(Customer.name == name)
     customer = Customer(
         name=name)
     customer.save()
-    cart = Cart.select(Cart.customer).where(Cart.customer == name)
+    cart = Cart.select().where(Cart.customer == name)
     cart = Cart(
         customer=customer)
     cart.save()
+    selection1 = cart.id
+    user_data['selection1'] = selection1
     button_list = [
         InlineKeyboardButton(
             "Перейти на сайт магазина", callback_data="1",
@@ -52,9 +54,7 @@ def add_customer(bot, update):
         build_menu(button_list, n_cols=2)
     )
     update.message.reply_text(
-        text="{}"
-        "для вас создали корзину товаров"
-        "выберите пожалуйста нужную команду!".format(name),
+        text="{} выберите пожалуйста нужную команду!".format(name),
         reply_markup=reply_markup
     )
     return ADD_ITEMS
@@ -62,24 +62,21 @@ def add_customer(bot, update):
 
 def add_items(bot, update):
     query = update.callback_query
+    item = Item.select()
+    print(item)
     if query.data == "buy":
-        button_list = [
-            InlineKeyboardButton("dress", callback_data="1"),
-            InlineKeyboardButton("shoes", callback_data="2"),
-            InlineKeyboardButton("hat", callback_data="3"),
-            InlineKeyboardButton("coat", callback_data="4"),
-            InlineKeyboardButton("jacket", callback_data="5"),
-            InlineKeyboardButton("cardigan", callback_data="6")
-        ]
-    reply_markup = InlineKeyboardMarkup(
-        build_menu(button_list, n_cols=2)
-    )
+        button_list = []
+    for item in Item.select():
+        button_list.append(InlineKeyboardButton(item.name, callback_data=str(
+            item.id)))
+        reply_markup = InlineKeyboardMarkup(
+            build_menu(button_list, n_cols=2)
+        )
     update.effective_message.reply_text(
         text="Выберите товар из списка,"
-        "пожалуйста, чтобы добавить его в вашу корзину",
+        " ""пожалуйста, чтобы добавить его в вашу корзину",
         reply_markup=reply_markup
     )
-
     return BUY
 
 
@@ -96,10 +93,8 @@ def buy(bot, update, user_data):
 
 def add_to_cart(bot, update, user_data):
     quantity = update.message.text
-    # here I get my old selection
-    old_selection = user_data['selection']
-    item_id = old_selection
-    cart_id = 1
+    item_id = user_data['selection']
+    cart_id = user_data['selection1']
     item = Item.select().where(Item.id == item_id)[0]
     print(item_id)
     cart = Cart.select().where(Cart.id == cart_id)[0]
@@ -128,7 +123,8 @@ def add_to_cart(bot, update, user_data):
 conversacion = ConversationHandler(
     entry_points=[CommandHandler('start', start)],
     states={
-        ADD_CUSTOMER: [MessageHandler(Filters.text, add_customer)],
+        ADD_CUSTOMER: [MessageHandler(
+            Filters.text, add_customer, pass_user_data=True)],
         ADD_ITEMS: [CallbackQueryHandler(add_items)],
         BUY: [CallbackQueryHandler(buy, pass_user_data=True)],
         ADD_TO_CART: [MessageHandler(
